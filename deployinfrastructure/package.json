@@ -1,0 +1,23 @@
+{
+  "name": "lab2iac",
+  "version": "0.1.0",
+  "bin": {
+    "lab2iac": "bin/lab2iac.js"
+  },
+  "scripts": {
+    "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
+    "cdk": "cdk",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@aws-cdk/assert": "1.67.0",
+    "aws-cdk": "1.67.0",
+    "jest": "^26.4.2"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-autoscaling": "^1.67.0",
+    "@aws-cdk/aws-ec2": "^1.67.0",
+    "@aws-cdk/aws-s3": "^1.67.0",
+    "@aws-cdk/core": "1.67.0"
+  }
+}
