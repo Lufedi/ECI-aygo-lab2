@@ -6,13 +6,10 @@
 node deploycode/create-key.js
 
 #deploy infrastructure
-cd deployingrastructure
+cd deployinfrastructure
 cdk synth
-cdk deploy
+yes | cdk deploy
 
 #deploy code to the machines
-
-cd ..
-cd deploycode
-node deploy-code.js
-
+cd ../deploycode
+node deploy-app.js

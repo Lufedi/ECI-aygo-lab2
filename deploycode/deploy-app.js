@@ -11,7 +11,7 @@ const getInstances =  async () => {
     
     const instances = response.Reservations.map(data => 
          data.Instances.filter(
-             instance => instance.Tags.filter(tag => tag.Key === "Name" && tag.Value === "Lab2IacStack/aygolab2-ASG").length > -1
+             instance => instance.Tags.filter(tag => tag.Key === "Name" && tag.Value === "Lab2IacStack/aygolab2-ASG").length > 0
         )
     )
     .flat()
@@ -24,7 +24,7 @@ const getInstances =  async () => {
 }
 
 
-/*const copyFiles = async (sshConnection ) => {
+const copyFiles = async (sshConnection ) => {
   console.log("Copying files ...")
   const failed = []
   const successful = []
@@ -56,15 +56,16 @@ const getInstances =  async () => {
   console.log('the directory transfer was', status ? 'successful' : 'unsuccessful')
   console.log('failed transfers', failed.join(', '))
   console.log('successful transfers', successful.join(', '))
-}*/
+}
 
-const runCommands = (ssh, commands) => {
-  return Promise.all(commands.map( async command => {
+const runCommands = async (ssh, commands) => {
+  for(const command of commands) {
+    console.log("-----------------------")
     console.log("ssh: " + command)
     const result = await ssh.execCommand(command)
-    console.log(result.stdout)
-    console.log(result.stderr)
-  }))
+    console.log("stdout: " + result.stdout)
+    console.log("stderr: " + result.stderr)
+  }
 }
 
 const initializeInstances = async (instances) => {    
@@ -78,30 +79,31 @@ const initializeInstances = async (instances) => {
 
   const CLONE_PROJECT = [
     "sudo yum install git -y",
-    "git clone "
+    "git clone https://github.com/Lufedi/ECI-aygo-lab2.git"
   ]
 
   const RUN_IMAGE_COMMANDS = [
-    "cd /home/ec2-user/lab2app && docker build -t lufedi/lab2app .",
+    "cd ECI-aygo-lab2/lab2app && docker build -t lufedi/lab2app .",
     "docker run -p 80:80 -d lufedi/lab2app"
   ]
 
-  await Promise.all(instances.map( async instance => {
 
-      console.log(`Copying and running app in ${instance.PublicDnsName}` )
-      const ssh = new NodeSSH()
-      await ssh.connect({
-          host: instance.PublicDnsName,
-          username: 'ec2-user',
-          privateKey: './key.pem'
-      })
-      
-      //TODO refactor this
-      await runCommands(ssh,INSTALL_DOCKER_COMMANDS)
-      
-      await runCommands(ssh,INSTALL_DOCKER_COMMANDS)   
-      console.log("App running!")
-  }))  
+  for(const instance of instances) {
+    console.log(`Copying and running app in ${instance.PublicDnsName}` )
+    const ssh = new NodeSSH()
+    await ssh.connect({
+        host: instance.PublicDnsName,
+        username: 'ec2-user',
+        privateKey: './key.pem'
+    })
+    
+    //TODO refactor this
+    await runCommands(ssh,INSTALL_DOCKER_COMMANDS)
+    await runCommands(ssh,CLONE_PROJECT)
+    await runCommands(ssh,RUN_IMAGE_COMMANDS)   
+    console.log("App running! in " + instance)
+  }
+ 
 }
 
 
