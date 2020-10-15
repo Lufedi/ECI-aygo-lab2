@@ -3,9 +3,21 @@ const path = require("path")
 const { NodeSSH } = require('node-ssh');
 const { exit } = require("process");
 
+
+const sleep = ms => new Promise((resolve) => { setTimeout(resolve, ms) })
+
+
+
+
+
+
 AWS.config.update({region:'us-west-2'});
 
 const getInstances =  async () => {
+    //wait for Infrastructure to finish running the instances
+    console.log("waiting for infra ...")
+    await sleep(40000)
+
     const ec2 = new AWS.EC2()
     const response = await ec2.describeInstances().promise()
     
@@ -15,6 +27,7 @@ const getInstances =  async () => {
         )
     )
     .flat()
+    .filter(({ PublicDnsName }) => !!PublicDnsName)
     .map(({ PublicDnsName }) => ({ PublicDnsName }))
 
     console.log("Instances found")
@@ -65,6 +78,7 @@ const runCommands = async (ssh, commands) => {
     const result = await ssh.execCommand(command)
     console.log("stdout: " + result.stdout)
     console.log("stderr: " + result.stderr)
+    await sleep(4000)
   }
 }
 
@@ -74,7 +88,7 @@ const initializeInstances = async (instances) => {
     "sudo yum install docker -y",
     "sudo service docker start",
     "sudo usermod -a -G docker ec2-user",
-    "docker info",
+    "sudo docker info",
   ]
 
   const CLONE_PROJECT = [
@@ -83,8 +97,8 @@ const initializeInstances = async (instances) => {
   ]
 
   const RUN_IMAGE_COMMANDS = [
-    "cd ECI-aygo-lab2/lab2app && docker build -t lufedi/lab2app .",
-    "docker run -p 80:80 -d lufedi/lab2app"
+    "cd ECI-aygo-lab2/lab2app && sudo docker build -t lufedi/lab2app .",
+    "sudo docker run -p 80:80 -d lufedi/lab2app"
   ]
 
 

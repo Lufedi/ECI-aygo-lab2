@@ -1,7 +1,6 @@
 const fs = require("fs")
 
 // Load the AWS SDK for Node.js
-const { FSx } = require('aws-sdk');
 var AWS = require('aws-sdk');
 // Set the region 
 AWS.config.update({region: 'us-west-2'});
@@ -19,5 +18,6 @@ ec2.createKeyPair(params, function(err, data) {
       console.log("Error", err);
    } else {
         fs.writeFileSync("key.pem",data.KeyMaterial)
+        console.log("key created")
    }
 });

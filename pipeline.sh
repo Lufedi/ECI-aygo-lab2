@@ -3,12 +3,13 @@
 
 
 #create AWS key
-node deploycode/create-key.js
+cd deploycode
+node create-key.js
 
 #deploy infrastructure
-cd deployinfrastructure
+cd ../deployinfrastructure
 cdk synth
-yes | cdk deploy
+cdk deploy --require-approval never
 
 #deploy code to the machines
 cd ../deploycode
