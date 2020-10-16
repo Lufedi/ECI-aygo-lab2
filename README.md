@@ -42,12 +42,12 @@ The app is a simple `nodejs` application built with the `expressjs` framework, t
 From this point the [pipeline](https://github.com/Lufedi/ECI-aygo-lab2/blob/main/pipeline.sh)  is just a `bash` script that will help us to provision the infrastructure and deploy our application to that infrasctructure.
 
 The pipeline is split in 3 stages
-1. Create AWS Key
+1. Create an AWS Key pair
 2. Provision the infrastructure
 3. Deploy code
    
 
-###### 1. Create AWS Key
+###### 1. Create an AWS Key pair
 This is a `nodejs` [script](https://github.com/Lufedi/ECI-aygo-lab2/blob/main/deploycode/create-key.js) that is using `aws-sdk` to create a Key pair, this key is required later when creating the EC2 instances
 
 ![](https://drive.google.com/uc?export=view&id=1CbQnJOK9gslsOI1eGsDWApW3poG6ZaL4)
@@ -71,7 +71,7 @@ Once the deployment has finished we can see a `CloudFormation` stack created wit
 ![](https://drive.google.com/uc?export=view&id=1t6DSEiJOjUwJ363AmET5VnfjGCAu5k8s)
 
 ###### 3. Deploy code
-This is a `nodejs` script that is using `aws-sdk` to obtain the access information of the instances created in the devious step, then using a ssh client (node-ssh) the script will download, build and run the application (docker, npm, git) 
+This is a `nodejs` script that is using `aws-sdk` to obtain the access information of the instances created in the previous step, then using a ssh client (node-ssh) the script will download, build and run the application (docker, npm, git) 
 
 
 First the script finds all the instances created in the previous step using the tag "stackName"
@@ -81,9 +81,11 @@ First the script finds all the instances created in the previous step using the 
 Then using a [node-ssh](https://www.npmjs.com/package/node-ssh) and the private key create in the step 1 a [bounch of commands](https://github.com/Lufedi/ECI-aygo-lab2/blob/main/deploycode/deploy-app.js#L80-L96) are executed to install docker and git, then this repository is downloaded, and finally the docker container is created running in with port 80.
 
 Running docker service:
+
 ![](https://drive.google.com/uc?export=view&id=1SjQeqP-74fKKvFdr5lBcGLQvUJAFTIIi)
 
 Running the container with port 80
+
 ![](https://drive.google.com/uc?export=view&id=1wc8MTOn-HDyNGJ-6SVrplLevofHPXK7q)
 
 This step is repeated for each EC2 instance found.
