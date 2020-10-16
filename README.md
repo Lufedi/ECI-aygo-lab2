@@ -78,7 +78,7 @@ First the script finds all the instances created in the previous step using the 
 
 ![](https://drive.google.com/uc?export=view&id=1Nhlh_2PAydPRJFg0BphoVs2N_uelyX_c)
 
-Then using a [node-ssh](https://www.npmjs.com/package/node-ssh) and the private key create in the step 1 a [bounch of commands](https://github.com/Lufedi/ECI-aygo-lab2/blob/main/deploycode/deploy-app.js#L80-L96) are executed to install docker and git, then this repository is downloaded, and finally the docker container is created running in with port 80.
+Then using a [node-ssh](https://www.npmjs.com/package/node-ssh) client and the private key create in the step 1 a [bunch of commands](https://github.com/Lufedi/ECI-aygo-lab2/blob/main/deploycode/deploy-app.js#L80-L96) are executed to install docker and git, then this repository is downloaded, and finally the docker container is created running in with port 80.
 
 Running docker service:
 
