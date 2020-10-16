@@ -25,8 +25,8 @@ class Lab2IacStack extends cdk.Stack {
       machineImage: new ec2.AmazonLinuxImage(),
       keyName: this.keyPairName,
       securityGroup: this.securityGroup,
-      minCapacity: 1,
-      maxCapacity: 2,
+      minCapacity: 3,
+      maxCapacity: 4,
       associatePublicIpAddress: true,
       vpcSubnets: { subnetType: SubnetType.PUBLIC},
     });

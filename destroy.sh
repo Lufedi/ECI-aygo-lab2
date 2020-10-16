@@ -2,4 +2,6 @@
 
 cd deployinfrastructure
 yes | cdk destroy -y
-rm deploycode/key.pem
+cd ../deploycode
+node delete-key.js
+rm key.pem

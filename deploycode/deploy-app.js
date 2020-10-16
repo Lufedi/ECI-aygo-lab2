@@ -3,20 +3,14 @@ const path = require("path")
 const { NodeSSH } = require('node-ssh');
 const { exit } = require("process");
 
-
 const sleep = ms => new Promise((resolve) => { setTimeout(resolve, ms) })
-
-
-
-
-
 
 AWS.config.update({region:'us-west-2'});
 
 const getInstances =  async () => {
     //wait for Infrastructure to finish running the instances
     console.log("waiting for infra ...")
-    await sleep(40000)
+    await sleep(120000)
 
     const ec2 = new AWS.EC2()
     const response = await ec2.describeInstances().promise()
@@ -115,7 +109,7 @@ const initializeInstances = async (instances) => {
     await runCommands(ssh,INSTALL_DOCKER_COMMANDS)
     await runCommands(ssh,CLONE_PROJECT)
     await runCommands(ssh,RUN_IMAGE_COMMANDS)   
-    console.log("App running! in " + instance)
+    console.log("App running! in " + instance.PublicDnsName)
   }
  
 }
@@ -129,7 +123,7 @@ AWS.config.getCredentials(async function(err) {
     console.log("Access key:", AWS.config.credentials.accessKeyId);
     const instances = await getInstances()
     await initializeInstances(instances)
-    console.log("finsidh")
+    console.log("Deployment completed!")
     exit()
   }
 });
