@@ -39,6 +39,9 @@ The app is a simple `nodejs` application built with the `expressjs` framework, t
 
 ##### The Pipeline
 
+
+
+
 From this point the [pipeline](https://github.com/Lufedi/ECI-aygo-lab2/blob/main/pipeline.sh)  is just a `bash` script that will help us to provision the infrastructure and deploy our application to that infrasctructure.
 
 The pipeline is split in 3 stages
@@ -46,6 +49,7 @@ The pipeline is split in 3 stages
 2. Provision the infrastructure
 3. Deploy code
    
+![](https://drive.google.com/uc?export=view&id=1GWRpRujSPqrXOe8bqFy2ttIZiL8lWCQY)
 
 ###### 1. Create an AWS Key pair
 This is a `nodejs` [script](https://github.com/Lufedi/ECI-aygo-lab2/blob/main/deploycode/create-key.js) that is using `aws-sdk` to create a Key pair, this key is required later when creating the EC2 instances
